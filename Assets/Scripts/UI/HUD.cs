@@ -24,8 +24,8 @@ public class HUD : MonoBehaviour
     private float coinsEased;
     private float healthBarWidth;
     private float healthBarWidthEased;
-    [System.NonSerialized] public string loadSceneName;
-    [System.NonSerialized] public bool resetPlayer;
+    public string loadSceneName;
+    public bool resetPlayer;
 
     void Start()
     {
@@ -78,6 +78,7 @@ public class HUD : MonoBehaviour
 
     void ResetScene()
     {
+        Debug.Log("ResetScene");
         if (GameManager.Instance.inventory.ContainsKey("reachedCheckpoint"))
         {
             //Send player back to the checkpoint if they reached one!
@@ -85,8 +86,11 @@ public class HUD : MonoBehaviour
         }
         else
         {
-            //Reload entire scene
-            SceneManager.LoadScene(loadSceneName);
+            if (loadSceneName != "")
+            {
+                //Reload entire scene
+                SceneManager.LoadScene(loadSceneName);
+            }
         }
     }
 

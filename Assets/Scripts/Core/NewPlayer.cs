@@ -234,7 +234,8 @@ public class NewPlayer : PhysicsObject
 
             if (health <= 0)
             {
-                StartCoroutine(Die());
+                // StartCoroutine(Die());
+                StartCoroutine(DieAndRebirth());
             }
             else
             {
@@ -284,6 +285,29 @@ public class NewPlayer : PhysicsObject
             GameManager.Instance.hud.loadSceneName = SceneManager.GetActiveScene().name;
             Time.timeScale = 1f;
         }
+    }
+
+    public IEnumerator DieAndRebirth()
+    {
+        if (!frozen)
+        {
+            deathParticles.Emit(10);
+            GameManager.Instance.audioSource.PlayOneShot(deathSound);
+            Hide(true);
+            Time.timeScale = .6f;
+            recoveryCounter.counter = -5.0f;
+            yield return new WaitForSeconds(2f);
+            GameManager.Instance.hud.animator.SetTrigger("coverScreen");
+            StartCoroutine(Rebirth());
+            Time.timeScale = 1f;
+        }
+    }
+
+    public IEnumerator Rebirth()
+    {
+        yield return new WaitForSeconds(3f);
+        Hide(false);
+        health = maxHealth;
     }
 
     public void ResetLevel()

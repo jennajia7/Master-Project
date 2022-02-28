@@ -232,9 +232,10 @@ public class NewPlayer : PhysicsObject
             launch = hurtDirection * (hurtLaunchPower.x);
             recoveryCounter.counter = 0;
 
-            if (health <= 0)
+            if (health <= 1)
             {
                 // StartCoroutine(Die());
+                health -= hitPower;
                 StartCoroutine(DieAndRebirth());
             }
             else
@@ -307,6 +308,7 @@ public class NewPlayer : PhysicsObject
     {
         yield return new WaitForSeconds(3f);
         Hide(false);
+        maxHealth += 1;
         health = maxHealth;
     }
 

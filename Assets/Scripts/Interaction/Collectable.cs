@@ -53,7 +53,8 @@ public class Collectable : MonoBehaviour
             if (NewPlayer.Instance.health < NewPlayer.Instance.maxHealth)
             {
                 GameManager.Instance.hud.HealthBarHurt();
-                NewPlayer.Instance.health += itemAmount;
+                // NewPlayer.Instance.health += itemAmount;
+                NewPlayer.Instance.AddHealth(itemAmount);
             }
         }
         else if (itemType == ItemType.Ammo)

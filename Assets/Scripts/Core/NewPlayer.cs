@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+public enum DeathAction {
+    Die,
+    Rebith,
+    NewWorld
+}
+
 /*Adds player functionality to a physics object*/
 
 [RequireComponent(typeof(RecoveryCounter))]
@@ -35,6 +41,10 @@ public class NewPlayer : PhysicsObject
         }
     }
 
+    // callback connect to health bar ui
+    public delegate void OnHealthChangedDelegate();
+    public OnHealthChangedDelegate onHealthChangedCallback;
+
     [Header("Properties")]
     [SerializeField] private string[] cheatItems;
     public bool dead = false;
@@ -53,10 +63,12 @@ public class NewPlayer : PhysicsObject
     [System.NonSerialized] public bool pounded;
     [System.NonSerialized] public bool pounding;
     [System.NonSerialized] public bool shooting = false;
+    public DeathAction deathAction;
 
     [Header ("Inventory")]
     public float ammo;
     public int coins;
+    public bool neverDie = false;
     public int health;
     public int maxHealth;
     public int maxAmmo;
@@ -81,7 +93,14 @@ public class NewPlayer : PhysicsObject
     {
         Cursor.visible = false;
         SetUpCheatItems();
-        health = maxHealth;
+        if (!neverDie)
+        {
+            health = maxHealth;
+        }
+        if (onHealthChangedCallback != null)
+        {
+            onHealthChangedCallback.Invoke();
+        }
         animatorFunctions = GetComponent<AnimatorFunctions>();
         origLocalScale = transform.localScale;
         recoveryCounter = GetComponent<RecoveryCounter>();
@@ -232,18 +251,52 @@ public class NewPlayer : PhysicsObject
             launch = hurtDirection * (hurtLaunchPower.x);
             recoveryCounter.counter = 0;
 
+            ReduceHealth(hitPower);
+
+            GameManager.Instance.hud.HealthBarHurt();
+        }
+    }
+
+    public void AddHealth(int amount)
+    {
+        if (health < maxHealth)
+        {
+            health += amount;
+        }
+        if (onHealthChangedCallback != null)
+        {
+            onHealthChangedCallback.Invoke();
+        }
+    }
+
+    public void ReduceHealth(int amount)
+    {
+        if (!neverDie)
+        {
             if (health <= 1)
             {
-                // StartCoroutine(Die());
-                health -= hitPower;
-                StartCoroutine(DieAndRebirth());
+                health -= amount;
+                if (deathAction == DeathAction.Die)
+                {
+                    StartCoroutine(Die());
+                }
+                else if (deathAction == DeathAction.Rebith)
+                {
+                    StartCoroutine(DieAndRebirth());
+                }
+                else if (deathAction == DeathAction.NewWorld)
+                {
+                    StartCoroutine(GoToNewWorld());
+                }
             }
             else
             {
-                health -= hitPower;
+                health -= amount;
             }
-
-            GameManager.Instance.hud.HealthBarHurt();
+        }
+        if (onHealthChangedCallback != null)
+        {
+            onHealthChangedCallback.Invoke();
         }
     }
 
@@ -303,6 +356,22 @@ public class NewPlayer : PhysicsObject
             Time.timeScale = 1f;
         }
     }
+
+    public IEnumerator GoToNewWorld()
+    {
+        if (!frozen)
+        {
+            dead = true;
+            deathParticles.Emit(10);
+            GameManager.Instance.audioSource.PlayOneShot(deathSound);
+            Hide(true);
+            Time.timeScale = .6f;
+            yield return new WaitForSeconds(5f);
+            GameManager.Instance.hud.animator.SetTrigger("coverScreen");
+            GameManager.Instance.hud.loadSceneName = "NewWorld";
+            Time.timeScale = 1f;
+        }
+    } 
 
     public IEnumerator Rebirth()
     {

@@ -12,7 +12,10 @@ public class Walker : PhysicsObject
     [SerializeField] private LayerMask layerMask; //What can the Walker actually touch?
     [SerializeField] enum EnemyType { Bug, Zombie }; //Bugs will simply patrol. Zombie's will immediately start chasing you forever until you defeat them.
     [SerializeField] EnemyType enemyType;
-   
+
+    public GameObject leftBound;
+    public GameObject rightBound;
+    [SerializeField] private bool useLeftRightBound = false;
     public float attentionRange;
     public float changeDirectionEase = 1; //How slowly should we change directions? A higher number is slower!
     [System.NonSerialized] public float direction = 1;
@@ -201,6 +204,18 @@ public class Walker : PhysicsObject
                 if ((leftLedge.collider == null || leftLedge.collider.gameObject.layer == 14) && direction == -1)
                 {
                     direction = 1;
+                }
+
+                if (useLeftRightBound && leftBound != null && rightBound != null)
+                {
+                    if (transform.position.x <= leftBound.transform.position.x)
+                    {
+                        direction = 1;
+                    }
+                    else if (transform.position.x >= rightBound.transform.position.x)
+                    {
+                        direction = -1;
+                    }
                 }
             }
         }

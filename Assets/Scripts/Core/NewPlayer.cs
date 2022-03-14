@@ -379,6 +379,10 @@ public class NewPlayer : PhysicsObject
         Hide(false);
         maxHealth += 1;
         health = maxHealth;
+        if (onHealthChangedCallback != null)
+        {
+            onHealthChangedCallback.Invoke();
+        }
     }
 
     public void ResetLevel()

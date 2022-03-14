@@ -13,7 +13,8 @@ public class HealthBarUIController : MonoBehaviour
 
     void Start()
     {
-        maxHealth = (int)NewPlayer.Instance.maxHealth;
+        // maxHealth = (int)NewPlayer.Instance.maxHealth;
+        maxHealth = 10;
         health = (int)NewPlayer.Instance.health;
         // Should I use lists? Maybe :)
         heartContainers = new GameObject[maxHealth];

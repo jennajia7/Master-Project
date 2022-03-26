@@ -238,6 +238,13 @@ public class NewPlayer : PhysicsObject
         launch = 0;
     }
 
+    public IEnumerator FreezeEffect(float length = 2.0f)
+    {
+        Freeze(true);
+        yield return new WaitForSeconds(length);
+        Freeze(false);
+    }
+
 
     public void GetHurt(int hurtDirection, int hitPower)
     {

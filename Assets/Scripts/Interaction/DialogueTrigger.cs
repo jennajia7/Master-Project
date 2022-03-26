@@ -68,6 +68,10 @@ public class DialogueTrigger : MonoBehaviour
                     }
                 }
                 sleeping = true;
+                if (FindObjectOfType<NewWorldGameManager>())
+                {
+                    FindObjectOfType<NewWorldGameManager>().GetComponent<NewWorldGameManager>().SeenDialogue();
+                }
             }
         }
         else

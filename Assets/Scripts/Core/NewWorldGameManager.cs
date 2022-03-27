@@ -10,7 +10,8 @@ public class NewWorldGameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(NewPlayer.Instance.FreezeEffect(3.0f));
+        // StartCoroutine(NewPlayer.Instance.FreezeEffect(3.0f));
+        NewPlayer.Instance.Freeze(true);
     }
 
     // Update is called once per frame
@@ -22,5 +23,6 @@ public class NewWorldGameManager : MonoBehaviour
     public void SeenDialogue()
     {
         npcWalk.mode = NPCWalk.NPCMode.stand;
+        NewPlayer.Instance.Freeze(false);
     }
 }

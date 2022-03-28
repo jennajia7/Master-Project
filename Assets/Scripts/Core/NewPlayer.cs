@@ -9,6 +9,11 @@ public enum DeathAction {
     NewWorld
 }
 
+public enum PlayerObject {
+    None,
+    NewWorld1
+}
+
 /*Adds player functionality to a physics object*/
 
 [RequireComponent(typeof(RecoveryCounter))]
@@ -46,6 +51,7 @@ public class NewPlayer : PhysicsObject
     public OnHealthChangedDelegate onHealthChangedCallback;
 
     [Header("Properties")]
+    public PlayerObject playerObject = PlayerObject.None;
     [SerializeField] private string[] cheatItems;
     public bool dead = false;
     public bool frozen = false;
@@ -64,6 +70,11 @@ public class NewPlayer : PhysicsObject
     [System.NonSerialized] public bool pounding;
     [System.NonSerialized] public bool shooting = false;
     public DeathAction deathAction;
+
+    [Header("Recovery counter")]
+    public float recoveryTime = 2.0f;
+    [System.NonSerialized] public float counter;
+    [System.NonSerialized] public bool recovering = false;
 
     [Header ("Inventory")]
     public float ammo;
@@ -241,8 +252,10 @@ public class NewPlayer : PhysicsObject
     public IEnumerator FreezeEffect(float length = 2.0f)
     {
         Freeze(true);
+        Debug.Log("freeze");
         yield return new WaitForSeconds(length);
         Freeze(false);
+        Debug.Log("not freeze");
     }
 
 
@@ -274,15 +287,29 @@ public class NewPlayer : PhysicsObject
         {
             onHealthChangedCallback.Invoke();
         }
+        if (playerObject == PlayerObject.NewWorld1)
+        {
+            if (health == 3)
+            {
+                Debug.Log("new world 1 object done");
+                // SceneSwitchManager.Instance.NewWorld1ObjDone();
+                NewWorldGameManager.Instance.SetupDiaglogue2();
+            }
+        }
     }
 
     public void ReduceHealth(int amount)
     {
         if (!neverDie)
         {
-            if (health <= 1)
+            health -= amount;
+            Debug.Log("health after hit" + health);
+            if (onHealthChangedCallback != null)
             {
-                health -= amount;
+                onHealthChangedCallback.Invoke();
+            }
+            if (health <= 0)
+            {
                 if (deathAction == DeathAction.Die)
                 {
                     StartCoroutine(Die());
@@ -296,15 +323,8 @@ public class NewPlayer : PhysicsObject
                     StartCoroutine(GoToNewWorld());
                 }
             }
-            else
-            {
-                health -= amount;
-            }
         }
-        if (onHealthChangedCallback != null)
-        {
-            onHealthChangedCallback.Invoke();
-        }
+        
     }
 
     private void HurtEffect()
@@ -373,9 +393,10 @@ public class NewPlayer : PhysicsObject
             GameManager.Instance.audioSource.PlayOneShot(deathSound);
             Hide(true);
             Time.timeScale = .6f;
-            yield return new WaitForSeconds(5f);
+            SceneSwitchManager.Instance.SavePosition(transform.position);
+            yield return new WaitForSeconds(4f);
             GameManager.Instance.hud.animator.SetTrigger("coverScreen");
-            GameManager.Instance.hud.loadSceneName = "NewWorld";
+            GameManager.Instance.hud.loadSceneName = "NewWorld1";
             Time.timeScale = 1f;
         }
     } 

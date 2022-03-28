@@ -12,7 +12,7 @@ public class DialogueBoxController : MonoBehaviour
     public Animator animator;
     public AudioSource audioSource;
     public AudioSource dialogueAudioSource;
-    [SerializeField] Dialogue dialogue;
+    public Dictionary<string, string[]> dialogue = new Dictionary<string, string[]>();
     private DialogueTrigger currentDialogueTrigger;
     private GameObject finishTalkingActivateGameObject;
 
@@ -135,11 +135,11 @@ public class DialogueBoxController : MonoBehaviour
         }
 
         nameMesh.text = characterName;
-        characterDiologue = dialogue.dialogue[fileName];
+        characterDiologue = dialogue[fileName];
 
-        if (dialogue.dialogue.ContainsKey(fileName + "Choice1"))
+        if (dialogue.ContainsKey(fileName + "Choice1"))
         {
-            choiceDiologue = dialogue.dialogue[fileName + "Choice1"];
+            choiceDiologue = dialogue[fileName + "Choice1"];
             choiceLocation = GetChoiceLocation();
         }
         else
@@ -155,7 +155,7 @@ public class DialogueBoxController : MonoBehaviour
 
     IEnumerator Close()
     {
-        if (index == choiceLocation && dialogue.dialogue.ContainsKey(fileName + "Choice1") && audioChoices.Length != 0)
+        if (index == choiceLocation && dialogue.ContainsKey(fileName + "Choice1") && audioChoices.Length != 0)
         {
             audioSource.Stop();
             yield return new WaitForSeconds(.1f);
@@ -202,6 +202,10 @@ public class DialogueBoxController : MonoBehaviour
         if (!repeat)
         {
             dialogueTrigger.completed = true;
+            if (NewWorldGameManager.Instance != null)
+            {
+                NewWorldGameManager.Instance.OnCompleteDiaglogue();
+            }
         }
 
         dialogueTrigger = null;
@@ -229,7 +233,7 @@ public class DialogueBoxController : MonoBehaviour
         }
 
 
-        if (index == choiceLocation + 1 && dialogue.dialogue.ContainsKey(fileName + "Choice1") && audioChoices.Length != 0)
+        if (index == choiceLocation + 1 && dialogue.ContainsKey(fileName + "Choice1") && audioChoices.Length != 0)
         {
             audioSource.Stop();
             yield return new WaitForSeconds(.1f);
@@ -252,7 +256,7 @@ public class DialogueBoxController : MonoBehaviour
         yield return new WaitForSeconds(.4f);
 
         //Show choices
-        if (index == choiceLocation && dialogue.dialogue.ContainsKey(fileName + "Choice1"))
+        if (index == choiceLocation && dialogue.ContainsKey(fileName + "Choice1"))
         {
             ShowChoices(true);
         }
@@ -306,8 +310,8 @@ public class DialogueBoxController : MonoBehaviour
         animator.SetBool("hasChoices", show);
         if (show)
         {
-            choice1Mesh.text = dialogue.dialogue[fileName + "Choice1"][choiceLocation];
-            choice2Mesh.text = dialogue.dialogue[fileName + "Choice2"][choiceLocation];
+            choice1Mesh.text = dialogue[fileName + "Choice1"][choiceLocation];
+            choice2Mesh.text = dialogue[fileName + "Choice2"][choiceLocation];
         }
     }
 }

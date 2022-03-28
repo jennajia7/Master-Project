@@ -12,10 +12,10 @@ public class DialogueTrigger : MonoBehaviour
     [SerializeField] private Animator iconAnimator; //The E icon animator
 
     [Header("Trigger")]
-    [SerializeField] private bool autoHit; //Does the player need to press the interact button, or will it simply fire automatically?
+    public bool autoHit; //Does the player need to press the interact button, or will it simply fire automatically?
     public bool completed;
-    [SerializeField] private bool repeat; //Set to true if the player should be able to talk again and again to the NPC. 
-    [SerializeField] private bool sleeping;
+    public bool repeat; //Set to true if the player should be able to talk again and again to the NPC. 
+    public bool sleeping;
 
     [Header ("Dialogue")]
     [SerializeField] private string characterName; //The character's name shown in the dialogue UI
@@ -68,9 +68,9 @@ public class DialogueTrigger : MonoBehaviour
                     }
                 }
                 sleeping = true;
-                if (FindObjectOfType<NewWorldGameManager>())
+                if (!repeat)
                 {
-                    FindObjectOfType<NewWorldGameManager>().GetComponent<NewWorldGameManager>().SeenDialogue();
+                    gameObject.GetComponent<NPCWalk>().mode = NPCWalk.NPCMode.stand;
                 }
             }
         }

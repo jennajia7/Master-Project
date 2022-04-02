@@ -8,6 +8,8 @@ so we use it for both player attacks and enemy attacks.
 
 public class AttackHit : MonoBehaviour
 {
+    public enum AttackFrom { Walker, Flyer};
+    public AttackFrom attackFrom;
     private enum AttacksWhat { EnemyBase, NewPlayer };
     [SerializeField] private AttacksWhat attacksWhat;
     [SerializeField] private bool oneHitKill;
@@ -44,7 +46,7 @@ public class AttackHit : MonoBehaviour
         {
             if (col.GetComponent<NewPlayer>() != null)
             {
-                NewPlayer.Instance.GetHurt(targetSide, hitPower);
+                NewPlayer.Instance.GetHurt(targetSide, hitPower, attackFrom);
                 if (isBomb) transform.parent.GetComponent<EnemyBase>().Die(); 
             }
         }

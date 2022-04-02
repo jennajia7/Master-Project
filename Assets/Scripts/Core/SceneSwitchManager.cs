@@ -9,6 +9,7 @@ public class SceneSwitchManager : MonoBehaviour
     private static bool created = false;
     public static Vector3 previousPosition;
     public static string previousScene;
+    public string loadSceneName;
     public static bool visitedNewWorld1 = false;
     public static bool visitedNewWorld2 = false;
     public static SceneSwitchManager Instance
@@ -37,7 +38,7 @@ public class SceneSwitchManager : MonoBehaviour
         {
             if (visitedNewWorld1 || visitedNewWorld2)
             {
-                InitializeLevelFromNewWorld1();
+                InitializeLevelFromNewWorld();
             }
             else
             {
@@ -45,6 +46,10 @@ public class SceneSwitchManager : MonoBehaviour
             }
         }
         else if (SceneManager.GetActiveScene().name == "NewWorld1")
+        {
+            NewPlayer.Instance.Freeze(true);
+        }
+        else if (SceneManager.GetActiveScene().name == "NewWorld2")
         {
             NewPlayer.Instance.Freeze(true);
         }
@@ -61,7 +66,7 @@ public class SceneSwitchManager : MonoBehaviour
         {
             if (visitedNewWorld1 || visitedNewWorld2)
             {
-                InitializeLevelFromNewWorld1();
+                InitializeLevelFromNewWorld();
             }
             else
             {
@@ -77,15 +82,23 @@ public class SceneSwitchManager : MonoBehaviour
     public void SavePosition(Vector3 pos)
     {
         previousPosition = pos;
-        Debug.Log(previousPosition);
+        Debug.Log("save player position " + previousPosition);
         previousScene = SceneManager.GetActiveScene().name;
         visitedNewWorld1 = false;
+        visitedNewWorld2 = false;
     }
 
-    public IEnumerator GoBack()
+    public IEnumerator GoBack(string sceneName)
     {
-        Debug.Log("Go back to level");
-        visitedNewWorld1 = true;
+        Debug.Log("Go back to level, from scene " + sceneName);
+        if (sceneName == "NewWorld1")
+        {
+            visitedNewWorld1 = true;
+        }
+        else if (sceneName == "NewWorld2")
+        {
+            visitedNewWorld2 = true;
+        }
         GameManager.Instance.hud.animator.SetTrigger("coverScreen");
         GameManager.Instance.hud.loadSceneName = previousScene;
         yield return new WaitForSeconds(1.0f);
@@ -97,9 +110,9 @@ public class SceneSwitchManager : MonoBehaviour
         NewPlayer.Instance.Freeze(true);
     }
 
-    public void InitializeLevelFromNewWorld1()
+    public void InitializeLevelFromNewWorld()
     {
-        Debug.Log("Initialize Scene From NewWorld1" + previousPosition);
+        Debug.Log("Initialize Scene From NewWorld " + previousPosition);
         NewPlayer.Instance.transform.position = previousPosition;
         GameObject npc = GameObject.Find("NPC");
         npc.GetComponent<DialogueTrigger>().completed = true;

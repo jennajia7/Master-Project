@@ -11,7 +11,8 @@ public enum DeathAction {
 
 public enum PlayerObject {
     None,
-    NewWorld1
+    NewWorld1,
+    NewWorld2
 }
 
 /*Adds player functionality to a physics object*/
@@ -259,7 +260,7 @@ public class NewPlayer : PhysicsObject
     }
 
 
-    public void GetHurt(int hurtDirection, int hitPower)
+    public void GetHurt(int hurtDirection, int hitPower, AttackHit.AttackFrom attackFrom)
     {
         //If the player is not frozen (ie talking, spawning, etc), recovering, and pounding, get hurt!
         if (!frozen && !recoveryCounter.recovering && !pounding)
@@ -271,7 +272,7 @@ public class NewPlayer : PhysicsObject
             launch = hurtDirection * (hurtLaunchPower.x);
             recoveryCounter.counter = 0;
 
-            ReduceHealth(hitPower);
+            ReduceHealth(hitPower, attackFrom);
 
             GameManager.Instance.hud.HealthBarHurt();
         }
@@ -292,18 +293,33 @@ public class NewPlayer : PhysicsObject
             if (health == 3)
             {
                 Debug.Log("new world 1 object done");
-                // SceneSwitchManager.Instance.NewWorld1ObjDone();
-                NewWorldGameManager.Instance.SetupDiaglogue2();
+                NewWorld1GameManager.Instance.SetupDiaglogue2();
+            }
+        }
+        else if (playerObject == PlayerObject.NewWorld2)
+        {
+            if (health == 3)
+            {
+                Debug.Log("new world 2 object done");
+                NewWorld2GameManager.Instance.SetupDiaglogue2();
             }
         }
     }
 
-    public void ReduceHealth(int amount)
+    public void ReduceHealth(int amount, AttackHit.AttackFrom attackFrom)
     {
         if (!neverDie)
         {
             health -= amount;
-            Debug.Log("health after hit" + health);
+            Debug.Log("health after hit " + health);
+            if (attackFrom == AttackHit.AttackFrom.Walker)
+            {
+                Debug.Log("attack by walker");
+            }
+            else if (attackFrom == AttackHit.AttackFrom.Flyer)
+            {
+                Debug.Log("attack by flyer");
+            }
             if (onHealthChangedCallback != null)
             {
                 onHealthChangedCallback.Invoke();
@@ -320,7 +336,7 @@ public class NewPlayer : PhysicsObject
                 }
                 else if (deathAction == DeathAction.NewWorld)
                 {
-                    StartCoroutine(GoToNewWorld());
+                    StartCoroutine(GoToNewWorld(attackFrom));
                 }
             }
         }
@@ -384,7 +400,7 @@ public class NewPlayer : PhysicsObject
         }
     }
 
-    public IEnumerator GoToNewWorld()
+    public IEnumerator GoToNewWorld(AttackHit.AttackFrom attackFrom)
     {
         if (!frozen)
         {
@@ -393,10 +409,17 @@ public class NewPlayer : PhysicsObject
             GameManager.Instance.audioSource.PlayOneShot(deathSound);
             Hide(true);
             Time.timeScale = .6f;
-            SceneSwitchManager.Instance.SavePosition(transform.position);
+            // SceneSwitchManager.Instance.SavePosition(transform.position);
             yield return new WaitForSeconds(4f);
             GameManager.Instance.hud.animator.SetTrigger("coverScreen");
-            GameManager.Instance.hud.loadSceneName = "NewWorld1";
+            if (attackFrom == AttackHit.AttackFrom.Walker)
+            {
+                GameManager.Instance.hud.loadSceneName = "NewWorld1";
+            }
+            else if (attackFrom == AttackHit.AttackFrom.Flyer)
+            {
+                GameManager.Instance.hud.loadSceneName = "NewWorld2";
+            }
             Time.timeScale = 1f;
         }
     } 

@@ -202,9 +202,13 @@ public class DialogueBoxController : MonoBehaviour
         if (!repeat)
         {
             dialogueTrigger.completed = true;
-            if (NewWorldGameManager.Instance != null)
+            if (NewWorld1GameManager.Instance != null)
             {
-                NewWorldGameManager.Instance.OnCompleteDiaglogue();
+                NewWorld1GameManager.Instance.OnCompleteDiaglogue();
+            }
+            else if (NewWorld2GameManager.Instance != null)
+            {
+                NewWorld2GameManager.Instance.OnCompleteDiaglogue();
             }
         }
 

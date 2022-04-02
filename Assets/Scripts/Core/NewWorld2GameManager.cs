@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewWorldGameManager : MonoBehaviour
+public class NewWorld2GameManager : MonoBehaviour
 {
     [Header ("Reference")]
     public NPCWalk npcWalk;
@@ -14,23 +14,21 @@ public class NewWorldGameManager : MonoBehaviour
     public Dictionary<string, string[]> dialogue = new Dictionary<string, string[]>();
     private enum DialogueState {one, two};
     private DialogueState dialogueState = DialogueState.one;
-    private static NewWorldGameManager instance;
-    public static NewWorldGameManager Instance
+    private static NewWorld2GameManager instance;
+    public static NewWorld2GameManager Instance
     {
         get
         {
             if (instance == null)
             {
-                instance = GameObject.FindObjectOfType<NewWorldGameManager>();
+                instance = GameObject.FindObjectOfType<NewWorld2GameManager>();
             }
             return instance;
         }
     }
-
     // Start is called before the first frame update
     void Start()
     {
-        // StartCoroutine(NewPlayer.Instance.FreezeEffect(3.0f));
         SetupDiaglogue1();
     }
 
@@ -42,7 +40,7 @@ public class NewWorldGameManager : MonoBehaviour
             "This is not the normal world because you've 'dead'.",
             "However...",
             "However...You got a second chance.",
-            "Kill all the enemies and get your health back!",
+            "Kill the flying enemy and get your health back!",
             "Good luck!"
         });
         dialogueBoxController.dialogue = dialogue;
@@ -55,14 +53,15 @@ public class NewWorldGameManager : MonoBehaviour
         dialogue.Clear();
         dialogue.Add("CharacterA", new string[] {
             "Nice job!",
-            "You have killed 3 enemies.",
+            "You have killed the enemy.",
             "Let's transfer you to the normal world.",
         });
         dialogueBoxController.dialogue = dialogue;
         dialogueTrigger.completed = false;
         dialogueTrigger.sleeping = false;
         npcWalk.mode = NPCWalk.NPCMode.follow;
-        npcWalk.transform.position = npcAppearPlace.transform.position;
+        // npcWalk.transform.position = npcAppearPlace.transform.position;
+        npcWalk.maxSpeed = 5;
         dialogueState = DialogueState.two;
 
     }
@@ -71,7 +70,7 @@ public class NewWorldGameManager : MonoBehaviour
     {
         if (dialogueState == DialogueState.two)
         {
-            StartCoroutine(SceneSwitchManager.Instance.GoBack());
+            StartCoroutine(SceneSwitchManager.Instance.GoBack("NewWorld2"));
         }
     }
 }

@@ -23,6 +23,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/NewWorld1.unity
     guid: a6fcfe5832c0a4f369e972f8f29d090e
+  - enabled: 1
+    path: Assets/Scenes/NewWorld2.unity
+    guid: cb320165a531e4112bd18329dfa73591
   - enabled: 0
     path: Assets/Scenes/DemoLevel.unity
     guid: 53953173316aa0a43a3912f541d85d08

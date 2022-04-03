@@ -31,8 +31,14 @@ public class FinishFlagHit : MonoBehaviour
         if (other.GetComponent<NewPlayer>() != null)
         {
             flagMoveUp = true;
+            NewPlayer.Instance.Freeze(true);
+            StartCoroutine(FinishGame());
         }
     }
 
-
+    private IEnumerator FinishGame()
+    {
+        yield return new WaitForSeconds(3.0f);
+        GameManager.Instance.hud.ShowEndingText(NewPlayer.Instance.coins);
+    }
 }

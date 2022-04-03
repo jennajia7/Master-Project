@@ -9,7 +9,8 @@ public class SceneSwitchManager : MonoBehaviour
     private static bool created = false;
     public static Vector3 previousPosition;
     public static string previousScene;
-    public string loadSceneName;
+    public static int coinCount;
+    public static List<GameObject> breakableBoxList;
     public static bool visitedNewWorld1 = false;
     public static bool visitedNewWorld2 = false;
     public static SceneSwitchManager Instance
@@ -86,6 +87,17 @@ public class SceneSwitchManager : MonoBehaviour
         previousScene = SceneManager.GetActiveScene().name;
         visitedNewWorld1 = false;
         visitedNewWorld2 = false;
+
+        // save coin numbers
+        coinCount = NewPlayer.Instance.coins;
+        // save breakable boxes
+        // Breakable[] breakables = FindObjectsOfType<Breakable>();
+        // foreach (Breakable box in breakables)
+        // {
+
+        // }
+        // save coin positions
+        // save enemy positions
     }
 
     public IEnumerator GoBack(string sceneName)
@@ -120,5 +132,6 @@ public class SceneSwitchManager : MonoBehaviour
         npc.GetComponent<NPCWalk>().mode = NPCWalk.NPCMode.stand;
         NewPlayer.Instance.maxHealth = 3;
         NewPlayer.Instance.recoveryCounter.counter = 0;
+        NewPlayer.Instance.coins = coinCount;
     }
 }

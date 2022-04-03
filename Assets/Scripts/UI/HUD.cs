@@ -16,6 +16,8 @@ public class HUD : MonoBehaviour
     [SerializeField] private GameObject healthBar;
     [SerializeField] private Image inventoryItemGraphic;
     [SerializeField] private GameObject startUp;
+    public GameObject endingScreen;
+    public TextMeshProUGUI endingText;
 
     private float ammoBarWidth;
     private float ammoBarWidthEased; //Easing variables slowly ease towards a number
@@ -92,6 +94,19 @@ public class HUD : MonoBehaviour
                 SceneManager.LoadScene(loadSceneName);
             }
         }
+    }
+
+    public void ShowEndingText(int coins)
+    {
+        endingText.text = "Congratulations! You've made your way out!\n" +
+                        "You found " + coins.ToString() + " coins along the way!";
+        endingScreen.SetActive(true);
+    }
+
+    public void RestartLevel()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
 }

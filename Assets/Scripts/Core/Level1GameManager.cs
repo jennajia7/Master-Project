@@ -30,7 +30,8 @@ public class Level1GameManager : MonoBehaviour
         //Door
         dialogue.Add("LockedDoorA", new string[] {
             "A large door...",
-            "Looks like it has a key hole!"
+            "But it's locked!",
+            "Where is the key…?"
         });
 
 
@@ -42,8 +43,9 @@ public class Level1GameManager : MonoBehaviour
         dialogue.Add("CharacterA", new string[] {
             "Hi there!",
             "Welcome to this world!",
-            "You can move around by using arrow key, space to jump, and left click to attack.",
-            "Please find your way out with as much coin as you can.",
+            "You can move around by using the arrow keys and, space to jump.",
+            "We have monsters in this world, so you'll want to avoid them or left click to shoot a bullet in the direction you're facing",
+            "Your goal is to  make your way out and find as many coins as you can.",
             "Good luck!"
         });
 

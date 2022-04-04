@@ -13,9 +13,7 @@ public class HUD : MonoBehaviour
     public Animator animator;
     [SerializeField] private GameObject ammoBar;
     public TextMeshProUGUI coinsMesh;
-    [SerializeField] private GameObject healthBar;
     [SerializeField] private Image inventoryItemGraphic;
-    [SerializeField] private GameObject startUp;
     public GameObject endingScreen;
     public TextMeshProUGUI endingText;
 
@@ -52,11 +50,6 @@ public class HUD : MonoBehaviour
             animator.SetTrigger("getGem");
             coins = coinsEased + 1;
         }
-
-        //Controls the width of the health bar based on the player's total health
-        healthBarWidth = (float)NewPlayer.Instance.health / (float)NewPlayer.Instance.maxHealth;
-        // healthBarWidthEased = (healthBarWidth - healthBarWidthEased) / healthBarWidth;
-        healthBar.transform.localScale = new Vector2(healthBarWidth, 1);
 
         //Controls the width of the ammo bar based on the player's total ammo
         if (ammoBar)

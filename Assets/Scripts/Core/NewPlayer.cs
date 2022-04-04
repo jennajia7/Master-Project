@@ -103,7 +103,6 @@ public class NewPlayer : PhysicsObject
 
     void Start()
     {
-        Cursor.visible = false;
         SetUpCheatItems();
         if (!neverDie)
         {

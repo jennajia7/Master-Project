@@ -8,10 +8,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/LogoIntro.unity
     guid: ae98fb7f6f10c4279b95db8643600d08
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Menu.unity
     guid: 78d194e4a6a6e4b7b8c3849f8cce7a99
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/DemoLevel v1.unity
     guid: b9712c6db68e14f359107ddd27e57a8d
   - enabled: 1

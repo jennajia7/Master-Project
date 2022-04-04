@@ -37,11 +37,12 @@ public class NewWorld2GameManager : MonoBehaviour
         dialogue.Clear();
         dialogue.Add("CharacterA", new string[] {
             "Hi, it's me again.",
-            "This is not the normal world because you've 'dead'.",
+            " You've found your way to the underworld because you died.",
             "However...",
-            "However...You got a second chance.",
-            "Kill the flying enemy and get your health back!",
-            "Good luck!"
+            "However...you've got a second chance.",
+            "In the underworld you get a chance to get your health back from the enemies that killed you.",
+            "Find all the hearts, and you'll have a chance to return.",
+            "Are you ready?"
         });
         dialogueBoxController.dialogue = dialogue;
         dialogueTrigger.completed = false;
@@ -53,8 +54,9 @@ public class NewWorld2GameManager : MonoBehaviour
         dialogue.Clear();
         dialogue.Add("CharacterA", new string[] {
             "Nice job!",
-            "You have killed the enemy.",
-            "Let's transfer you to the normal world.",
+            "You have killed all the enemies and gotten your health back.",
+            "You're now ready to make your way back to the normal world."
+
         });
         dialogueBoxController.dialogue = dialogue;
         dialogueTrigger.completed = false;

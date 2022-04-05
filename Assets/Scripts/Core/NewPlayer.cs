@@ -71,6 +71,7 @@ public class NewPlayer : PhysicsObject
     [System.NonSerialized] public bool pounding;
     [System.NonSerialized] public bool shooting = false;
     public DeathAction deathAction;
+    public Vector3 previousPosition;
 
     [Header("Recovery counter")]
     public float recoveryTime = 2.0f;
@@ -387,6 +388,7 @@ public class NewPlayer : PhysicsObject
     {
         if (!frozen)
         {
+            Debug.Log("die and rebirth");
             deathParticles.Emit(10);
             GameManager.Instance.audioSource.PlayOneShot(deathSound);
             Hide(true);
@@ -403,13 +405,14 @@ public class NewPlayer : PhysicsObject
     {
         if (!frozen)
         {
+            Debug.Log("go to new world");
             dead = true;
             deathParticles.Emit(10);
             GameManager.Instance.audioSource.PlayOneShot(deathSound);
             Hide(true);
             Time.timeScale = .6f;
             // SceneSwitchManager.Instance.SavePosition(transform.position);
-            yield return new WaitForSeconds(4f);
+            yield return new WaitForSeconds(3f);
             GameManager.Instance.hud.animator.SetTrigger("coverScreen");
             if (attackFrom == AttackHit.AttackFrom.Walker)
             {
@@ -425,7 +428,8 @@ public class NewPlayer : PhysicsObject
 
     public IEnumerator Rebirth()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2f);
+        transform.position = previousPosition;
         Hide(false);
         maxHealth += 1;
         health = maxHealth;

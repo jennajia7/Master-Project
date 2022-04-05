@@ -8,7 +8,14 @@ public class CheckPointController : MonoBehaviour
     {
         if (col.gameObject == NewPlayer.Instance.gameObject)
         {
-            SceneSwitchManager.Instance.SavePosition(col.gameObject.transform.position);
+            if (NewPlayer.Instance.deathAction == DeathAction.NewWorld)
+            {
+                SceneSwitchManager.Instance.SavePosition(col.gameObject.transform.position);
+            }
+            else if (NewPlayer.Instance.deathAction == DeathAction.Rebith)
+            {
+                NewPlayer.Instance.previousPosition = col.gameObject.transform.position;
+            }
         }
     }
 }

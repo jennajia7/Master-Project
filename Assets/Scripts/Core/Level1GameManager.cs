@@ -44,8 +44,8 @@ public class Level1GameManager : MonoBehaviour
             "Hi there!",
             "Welcome to this world!",
             "You can move around by using the arrow keys and, space to jump.",
-            "We have monsters in this world, so you'll want to avoid them or left click to shoot a bullet in the direction you're facing",
-            "Your goal is to  make your way out and find as many coins as you can.",
+            "We have monsters in this world, so you'll want to avoid them or left click to shoot a bullet in the direction you're facing.",
+            "Your goal is to make your way out and find as many coins as you can.",
             "Good luck!"
         });
 

@@ -41,7 +41,7 @@ public class NewWorld1GameManager : MonoBehaviour
             "Hi, it's me again.",
             " You've found your way to the underworld because you died.",
             "However...",
-            "However...you've got a second chance.",
+            "However... you've got a second chance.",
             "In the underworld you get a chance to get your health back from the enemies that killed you.",
             "Find all the hearts, and you'll have a chance to return.",
             "Are you ready?"
